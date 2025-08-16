@@ -4,12 +4,19 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/Yandex-Practicum/go1fl-sprint6-final/internal/service"
 )
 
 func GetForm(w http.ResponseWriter, r *http.Request) {
-	resp, err := os.ReadFile("../index.html")
+	path, err := filepath.Abs("../index.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := os.ReadFile(path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
